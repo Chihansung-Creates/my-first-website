@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotia – Express. Reflect. Heal.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366F1;
+            --primary-light: #8B5CF6;
+            --primary-dark: #4F46E5;
+            --secondary: #EC4899;
+            --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --surface: #FFFFFF;
+            --surface-secondary: #F8FAFC;
+            --surface-tertiary: #F1F5F9;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-tertiary: #94A3B8;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --surface: #1E293B;
+            --surface-secondary: #334155;
+            --surface-tertiary: #475569;
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --text-tertiary: #94A3B8;
+            --border: #475569;
+            --border-light: #334155;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+        }
+
+        body {
+            font-family: 'Inter', 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--surface-secondary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+            color: var(--text-secondary);
+        }
+
+        .theme-toggle:hover {
+            background: var(--surface-secondary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-secondary);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Home Page */
+        .home-page {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .welcome-quote {
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.2;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+
+        .cta-section {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        /* Quick Feeling Input */
+        .quick-feeling {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .quick-feeling h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .quick-input {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .quick-textarea {
+            flex: 1;
+            min-height: 80px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            background: var(--surface);
+        }
+
+        .quick-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .quick-save {
+            padding: 1rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .quick-save:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .cta-button {
+            font-size: 1.2rem;
+            padding: 1rem 2rem;
+            margin: 1rem;
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Write Feeling Page */
+        .write-page {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .write-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .write-header h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .write-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .feeling-form {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .emotion-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .emotion-option {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            background: var(--surface);
+        }
+
+        .emotion-option:hover {
+            border-color: var(--primary);
+            background: var(--surface-secondary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .emotion-option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .emotion-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .emotion-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .feeling-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+            background: var(--surface);
+        }
+
+        .feeling-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .feeling-textarea::placeholder {
+            color: var(--text-tertiary);
+            font-style: italic;
+        }
+
+        /* Mood Intensity Slider */
+        .mood-intensity {
+            margin: 1.5rem 0;
+        }
+
+        .mood-intensity h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .intensity-slider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .intensity-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            margin-top: 0.5rem;
+        }
+
+        .slider-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .intensity-slider input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .intensity-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .intensity-slider input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .intensity-value {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .privacy-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
+        }
+
+        /* Journal Page */
+        .journal-page {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .journal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .journal-header h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .journal-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .journal-entries {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .journal-entry {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            border-left: 4px solid;
+            transition: all 0.2s ease;
+        }
+
+        .journal-entry:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .entry-emotion {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .entry-emotion-icon {
+            font-size: 1.2rem;
+        }
+
+        .entry-date {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        .entry-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .entry-actions {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .entry-action {
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .entry-action:hover {
+            color: var(--primary);
+        }
+
+        /* Insights Page */
+        .insights-page {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .insights-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .insights-header h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .insight-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .insight-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .mood-chart {
+            height: 200px;
+            background: var(--surface-secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .mood-bar {
+            background: var(--primary);
+            width: 20px;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease;
+        }
+
+        /* Community Page */
+        .community-page {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .community-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .community-header h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .community-posts {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .community-post {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            border-left: 4px solid var(--success);
+        }
+
+        .community-post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .community-post-author {
+            font-weight: 500;
+            color: var(--success);
+        }
+
+        .community-post-date {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        .community-post-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .community-reactions {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .reaction-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .reaction-btn:hover {
+            transform: scale(1.2);
+        }
+
+        /* Settings Page */
+        .settings-page {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .settings-header h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .settings-section {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .settings-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .setting-label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .setting-input {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            background: var(--surface);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid rgba(139, 92, 246, 0.2);
+            border-top: 3px solid var(--accent-purple);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Help Page */
+        .help-page {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .help-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .help-header h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .help-section {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .help-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .resource-item {
+            padding: 0.75rem;
+            background: var(--surface-secondary);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .resource-item strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .resource-item a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .resource-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Affirmation Card */
+        .affirmation-card {
+            background: var(--surface-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .affirmation-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Breathing Exercise */
+        .breathing-exercise {
+            text-align: center;
+        }
+
+        .breathing-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            transition: transform 0.3s ease;
+        }
+
+        .breathing-text {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .breathing-circle.breathing {
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .welcome-quote {
+                font-size: 2rem;
+            }
+
+            .cta-section {
+                padding: 2rem;
+            }
+
+            .emotion-selector {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+
+            .journal-filters {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--accent-purple);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo" onclick="showPage('home')">
+                    <div class="logo-icon">E</div>
+                    Emotia
+                </a>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="showPage('journal')">📅 My Journal</button>
+                    <button class="btn btn-secondary" onclick="showPage('insights')">📊 Insights</button>
+                    <button class="btn btn-secondary" onclick="showPage('community')">💬 Community</button>
+                    <button class="btn btn-secondary" onclick="showPage('help')">💡 Help</button>
+                    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+                    <button class="btn btn-primary" onclick="showPage('write')">✍️ Write Feeling</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Home Page -->
+            <div id="home" class="page active">
+                <div class="home-page">
+                    <div class="welcome-quote">
+                        "Your feelings are valid. Your story matters."
+                    </div>
+                    <div class="welcome-subtitle">
+                        A safe space to express your emotions, reflect on your journey, and heal through understanding.
+                    </div>
+                    
+                    <!-- Quick Feeling Input -->
+                    <div class="quick-feeling">
+                        <h3>What are you feeling right now?</h3>
+                        <div class="quick-input">
+                            <textarea 
+                                class="quick-textarea" 
+                                placeholder="Express what's in your heart..."
+                                id="quickFeelingText"></textarea>
+                            <button class="quick-save" onclick="saveQuickFeeling()">💜 Save</button>
+                        </div>
+                    </div>
+
+                    <div class="cta-section">
+                        <h3 style="font-family: 'Inter', sans-serif; color: var(--text-primary); margin-bottom: 1rem; font-weight: 600;">
+                            Ready to express what's in your heart?
+                        </h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                            No judgment, no pressure. Just a gentle space to be yourself.
+                        </p>
+                        <button class="btn btn-primary cta-button" onclick="showPage('write')">
+                            ✍️ Write What I Feel
+                        </button>
+                        <button class="btn btn-secondary cta-button" onclick="showPage('journal')">
+                            📖 View My Journey
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Write Feeling Page -->
+            <div id="write" class="page">
+                <div class="write-page">
+                    <div class="write-header">
+                        <h2>How are you feeling right now?</h2>
+                        <p>Take a moment to check in with yourself and express what's in your heart.</p>
+                    </div>
+                    
+                    <div class="feeling-form">
+                        <div class="emotion-selector">
+                            <div class="emotion-option" data-emotion="happy" data-color="#10B981">
+                                <div class="emotion-icon">😊</div>
+                                <div class="emotion-label">Happy</div>
+                            </div>
+                            <div class="emotion-option" data-emotion="sad" data-color="#64748B">
+                                <div class="emotion-icon">😢</div>
+                                <div class="emotion-label">Sad</div>
+                            </div>
+                            <div class="emotion-option" data-emotion="anxious" data-color="#F59E0B">
+                                <div class="emotion-icon">😰</div>
+                                <div class="emotion-label">Anxious</div>
+                            </div>
+                            <div class="emotion-option" data-emotion="angry" data-color="#EF4444">
+                                <div class="emotion-icon">😠</div>
+                                <div class="emotion-label">Angry</div>
+                            </div>
+                            <div class="emotion-option" data-emotion="lonely" data-color="#8B5CF6">
+                                <div class="emotion-icon">💜</div>
+                                <div class="emotion-label">Lonely</div>
+                            </div>
+                            <div class="emotion-option" data-emotion="grateful" data-color="#059669">
+                                <div class="emotion-icon">🙏</div>
+                                <div class="emotion-label">Grateful</div>
+                            </div>
+                            <div class="emotion-option" data-emotion="confused" data-color="#6366F1">
+                                <div class="emotion-icon">😕</div>
+                                <div class="emotion-label">Confused</div>
+                            </div>
+                            <div class="emotion-option" data-emotion="hopeful" data-color="#06B6D4">
+                                <div class="emotion-icon">✨</div>
+                                <div class="emotion-label">Hopeful</div>
+                            </div>
+                            <div class="emotion-option" data-emotion="peaceful" data-color="#3B82F6">
+                                <div class="emotion-icon">😌</div>
+                                <div class="emotion-label">Peaceful</div>
+                            </div>
+                        </div>
+
+                        <textarea 
+                            class="feeling-textarea" 
+                            placeholder="What's on your mind? How are you feeling right now? What happened today that affected you? There's no right or wrong way to express yourself here..."
+                            id="feelingText"></textarea>
+
+                        <div class="mood-intensity">
+                            <h4>How intense is this feeling?</h4>
+                            <div class="intensity-slider">
+                                <span style="font-size: 0.9rem; color: var(--text-tertiary);">Mild</span>
+                                <div class="slider-container">
+                                    <input type="range" id="intensitySlider" min="1" max="10" value="5" class="intensity-range">
+                                    <div class="intensity-labels">
+                                        <span>1</span>
+                                        <span>5</span>
+                                        <span>10</span>
+                                    </div>
+                                </div>
+                                <span style="font-size: 0.9rem; color: var(--text-tertiary);">Intense</span>
+                                <div class="intensity-value" id="intensityValue">5</div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <div class="privacy-toggle">
+                                <span>Share with community</span>
+                                <div class="toggle-switch" id="privacyToggle">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="saveFeeling()">
+                                💜 Save My Feeling
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal Page -->
+            <div id="journal" class="page">
+                <div class="journal-page">
+                    <div class="journal-header">
+                        <h2>Your Emotional Journey</h2>
+                        <p>Reflect on your feelings and see how you've grown over time.</p>
+                    </div>
+
+                    <div class="journal-filters">
+                        <button class="filter-btn active" data-filter="all">All Entries</button>
+                        <button class="filter-btn" data-filter="happy">😊 Happy</button>
+                        <button class="filter-btn" data-filter="sad">😢 Sad</button>
+                        <button class="filter-btn" data-filter="anxious">😰 Anxious</button>
+                        <button class="filter-btn" data-filter="angry">😠 Angry</button>
+                        <button class="filter-btn" data-filter="lonely">💜 Lonely</button>
+                        <button class="filter-btn" data-filter="grateful">🙏 Grateful</button>
+                        <button class="filter-btn" data-filter="confused">😕 Confused</button>
+                        <button class="filter-btn" data-filter="hopeful">✨ Hopeful</button>
+                        <button class="filter-btn" data-filter="peaceful">😌 Peaceful</button>
+                    </div>
+
+                    <div class="journal-entries" id="journalEntries">
+                        <!-- Entries will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights Page -->
+            <div id="insights" class="page">
+                <div class="insights-page">
+                    <div class="insights-header">
+                        <h2>Your Growth Insights</h2>
+                        <p>Discover patterns in your emotions and celebrate your progress.</p>
+                    </div>
+
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <h3>📊 Emotional Patterns</h3>
+                            <div class="mood-chart" id="moodChart">
+                                <!-- Chart will be populated here -->
+                            </div>
+                            <p id="patternInsight">Keep expressing your feelings to see patterns emerge.</p>
+                        </div>
+
+                        <div class="insight-card">
+                            <h3>💜 Most Common Feelings</h3>
+                            <div id="commonFeelings">
+                                <!-- Common feelings will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="insight-card">
+                            <h3>🌟 Growth Milestones</h3>
+                            <div id="growthMilestones">
+                                <!-- Milestones will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="insight-card">
+                            <h3>📝 Reflection Prompts</h3>
+                            <div id="reflectionPrompts">
+                                <p>💭 What emotions have you been feeling most often this week?</p>
+                                <p>🌱 How have your feelings changed since you started journaling?</p>
+                                <p>💫 What patterns do you notice in your emotional journey?</p>
+                                <p>🌈 What would you tell your past self about how you're feeling now?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Page -->
+            <div id="community" class="page">
+                <div class="community-page">
+                    <div class="community-header">
+                        <h2>Community Support</h2>
+                        <p>Read shared feelings from others who understand. You're not alone in this journey.</p>
+                    </div>
+
+                    <div class="community-posts" id="communityPosts">
+                        <!-- Community posts will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help & Inspiration Page -->
+            <div id="help" class="page">
+                <div class="help-page">
+                    <div class="help-header">
+                        <h2>Help & Inspiration</h2>
+                        <p>Resources, affirmations, and tools to support your emotional journey.</p>
+                    </div>
+
+                    <div class="help-grid">
+                        <div class="help-section">
+                            <h3>🧠 Mental Health Resources</h3>
+                            <div class="resource-list">
+                                <div class="resource-item">
+                                    <strong>Crisis Support:</strong>
+                                    <a href="tel:988" target="_blank">National Suicide Prevention Lifeline: 988</a>
+                                </div>
+                                <div class="resource-item">
+                                    <strong>Text Support:</strong>
+                                    <a href="sms:741741" target="_blank">Crisis Text Line: Text HOME to 741741</a>
+                                </div>
+                                <div class="resource-item">
+                                    <strong>Find a Therapist:</strong>
+                                    <a href="https://www.psychologytoday.com" target="_blank">Psychology Today Directory</a>
+                                </div>
+                                <div class="resource-item">
+                                    <strong>Online Therapy:</strong>
+                                    <a href="https://www.betterhelp.com" target="_blank">BetterHelp</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="help-section">
+                            <h3>✨ Daily Affirmations</h3>
+                            <div class="affirmation-card" id="dailyAffirmation">
+                                <div class="affirmation-text" id="affirmationText">
+                                    "I am worthy of love, happiness, and peace. My feelings are valid and important."
+                                </div>
+                                <button class="btn btn-secondary" onclick="newAffirmation()">New Affirmation</button>
+                            </div>
+                        </div>
+
+                        <div class="help-section">
+                            <h3>🌱 Breathing Exercise</h3>
+                            <div class="breathing-exercise">
+                                <div class="breathing-circle" id="breathingCircle">
+                                    <span class="breathing-text" id="breathingText">Click to start</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="startBreathing()">Start Breathing</button>
+                            </div>
+                        </div>
+
+                        <div class="help-section">
+                            <h3>📚 Self-Help Resources</h3>
+                            <div class="resource-list">
+                                <div class="resource-item">
+                                    <strong>Meditation:</strong>
+                                    <a href="https://www.headspace.com" target="_blank">Headspace</a>
+                                </div>
+                                <div class="resource-item">
+                                    <strong>Mindfulness:</strong>
+                                    <a href="https://www.calm.com" target="_blank">Calm</a>
+                                </div>
+                                <div class="resource-item">
+                                    <strong>Journaling:</strong>
+                                    <a href="https://www.dayoneapp.com" target="_blank">Day One</a>
+                                </div>
+                                <div class="resource-item">
+                                    <strong>Books:</strong>
+                                    <a href="https://www.goodreads.com" target="_blank">Recommended Reading</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings" class="page">
+                <div class="settings-page">
+                    <div class="settings-header">
+                        <h2>Settings</h2>
+                        <p>Customize your Emotia experience.</p>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Profile</h3>
+                        <div class="setting-item">
+                            <span class="setting-label">Nickname</span>
+                            <input type="text" class="setting-input" id="nickname" placeholder="Your nickname">
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Privacy</h3>
+                        <div class="setting-item">
+                            <span class="setting-label">Default privacy for new posts</span>
+                            <select class="setting-input" id="defaultPrivacy">
+                                <option value="private">Private</option>
+                                <option value="public">Share with community</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Data</h3>
+                        <div class="setting-item">
+                            <span class="setting-label">Export my data</span>
+                            <button class="btn btn-secondary" onclick="exportData()">📥 Export</button>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Clear all data</span>
+                            <button class="btn btn-secondary" onclick="clearAllData()" style="background: #EF4444; color: white;">🗑️ Clear All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Processing your feelings...</p>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModal')">&times;</span>
+            <h3>Edit Your Entry</h3>
+            <textarea id="editText" class="feeling-textarea" style="margin: 1rem 0;"></textarea>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-primary" onclick="saveEdit()">💜 Save Changes</button>
+                <button class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let feelings = [];
+        let currentFilter = 'all';
+        let editingId = null;
+        let currentTheme = 'light';
+        let breathingInterval = null;
+
+        // Emotion data
+        const emotions = {
+            happy: { icon: '😊', color: '#10B981' },
+            sad: { icon: '😢', color: '#64748B' },
+            anxious: { icon: '😰', color: '#F59E0B' },
+            angry: { icon: '😠', color: '#EF4444' },
+            lonely: { icon: '💜', color: '#8B5CF6' },
+            grateful: { icon: '🙏', color: '#059669' },
+            confused: { icon: '😕', color: '#6366F1' },
+            hopeful: { icon: '✨', color: '#06B6D4' },
+            peaceful: { icon: '😌', color: '#3B82F6' }
+        };
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            loadTheme();
+            setupEventListeners();
+            renderJournal();
+            renderCommunity();
+            updateInsights();
+            updateAffirmations();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Emotion selection
+            document.querySelectorAll('.emotion-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.emotion-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // Privacy toggle
+            document.getElementById('privacyToggle').addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderJournal();
+                });
+            });
+
+            // Auto-resize textarea
+            document.getElementById('feelingText').addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+
+            // Intensity slider
+            const intensitySlider = document.getElementById('intensitySlider');
+            const intensityValue = document.getElementById('intensityValue');
+            
+            if (intensitySlider && intensityValue) {
+                intensitySlider.addEventListener('input', function() {
+                    intensityValue.textContent = this.value;
+                });
+            }
+        }
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update content when switching pages
+            if (pageId === 'journal') {
+                renderJournal();
+            } else if (pageId === 'insights') {
+                updateInsights();
+            } else if (pageId === 'community') {
+                renderCommunity();
+            } else if (pageId === 'help') {
+                updateAffirmations();
+            }
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const savedFeelings = localStorage.getItem('emotiaFeelings');
+            if (savedFeelings) {
+                feelings = JSON.parse(savedFeelings);
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('emotiaFeelings', JSON.stringify(feelings));
+        }
+
+        // Theme management
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('emotiaTheme') || 'light';
+            setTheme(savedTheme);
+        }
+
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('emotiaTheme', theme);
+            
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+        }
+
+        // Save a new feeling
+        function saveFeeling() {
+            const selectedEmotion = document.querySelector('.emotion-option.selected');
+            const feelingText = document.getElementById('feelingText').value.trim();
+            const isPublic = document.getElementById('privacyToggle').classList.contains('active');
+            const intensity = document.getElementById('intensitySlider') ? document.getElementById('intensitySlider').value : 5;
+
+            if (!selectedEmotion) {
+                showNotification('Please select how you\'re feeling first 💜');
+                return;
+            }
+
+            if (!feelingText) {
+                showNotification('Please share what\'s in your heart 💜');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+
+            setTimeout(() => {
+                const newFeeling = {
+                    id: Date.now(),
+                    emotion: selectedEmotion.dataset.emotion,
+                    emotionColor: selectedEmotion.dataset.color,
+                    content: feelingText,
+                    intensity: parseInt(intensity),
+                    timestamp: new Date().toISOString(),
+                    isPublic: isPublic
+                };
+
+                feelings.unshift(newFeeling);
+                saveData();
+
+                // Reset form
+                document.getElementById('feelingText').value = '';
+                document.querySelectorAll('.emotion-option').forEach(opt => opt.classList.remove('selected'));
+                document.getElementById('privacyToggle').classList.remove('active');
+                if (document.getElementById('intensitySlider')) {
+                    document.getElementById('intensitySlider').value = 5;
+                    document.getElementById('intensityValue').textContent = '5';
+                }
+
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+
+                // Show success and switch to journal
+                showNotification('Your feeling has been saved with love 💜');
+                showPage('journal');
+            }, 1000);
+        }
+
+        // Save quick feeling from home page
+        function saveQuickFeeling() {
+            const feelingText = document.getElementById('quickFeelingText').value.trim();
+
+            if (!feelingText) {
+                showNotification('Please share what\'s in your heart 💜');
+                return;
+            }
+
+            // Create a quick feeling with default emotion
+            const newFeeling = {
+                id: Date.now(),
+                emotion: 'hopeful',
+                emotionColor: '#06B6D4',
+                content: feelingText,
+                intensity: 5,
+                timestamp: new Date().toISOString(),
+                isPublic: false
+            };
+
+            feelings.unshift(newFeeling);
+            saveData();
+
+            // Reset form
+            document.getElementById('quickFeelingText').value = '';
+
+            // Show success
+            showNotification('Your feeling has been saved with love 💜');
+        }
+
+        // Render journal entries
+        function renderJournal() {
+            const container = document.getElementById('journalEntries');
+            let filteredFeelings = feelings;
+
+            if (currentFilter !== 'all') {
+                filteredFeelings = feelings.filter(feeling => feeling.emotion === currentFilter);
+            }
+
+            if (filteredFeelings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3>No entries yet</h3>
+                        <p>${currentFilter === 'all' ? 'Start your emotional journey by writing your first feeling.' : `No ${currentFilter} entries found.`}</p>
+                        <button class="btn btn-primary" onclick="showPage('write')" style="margin-top: 1rem;">
+                            ✍️ Write My First Feeling
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredFeelings.map(feeling => `
+                <div class="journal-entry" style="border-left-color: ${feeling.emotionColor};">
+                    <div class="entry-header">
+                        <div class="entry-emotion">
+                            <span class="entry-emotion-icon">${emotions[feeling.emotion].icon}</span>
+                            <span>${feeling.emotion.charAt(0).toUpperCase() + feeling.emotion.slice(1)}</span>
+                        </div>
+                        <div class="entry-date">${formatDate(feeling.timestamp)}</div>
+                    </div>
+                    <div class="entry-content">${feeling.content}</div>
+                    <div class="entry-actions">
+                        <span class="entry-action" onclick="editFeeling(${feeling.id})">
+                            ✏️ Edit
+                        </span>
+                        <span class="entry-action" onclick="deleteFeeling(${feeling.id})">
+                            🗑️ Delete
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render community posts
+        function renderCommunity() {
+            const container = document.getElementById('communityPosts');
+            const publicFeelings = feelings.filter(feeling => feeling.isPublic);
+
+            if (publicFeelings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💬</div>
+                        <h3>No community posts yet</h3>
+                        <p>Be the first to share your feelings with the community!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = publicFeelings.map(feeling => `
+                <div class="community-post">
+                    <div class="community-post-header">
+                        <span class="community-post-author">Anonymous</span>
+                        <span class="community-post-date">${formatDate(feeling.timestamp)}</span>
+                    </div>
+                    <div class="community-post-content">${feeling.content}</div>
+                    <div class="community-reactions">
+                        <button class="reaction-btn" onclick="addReaction('${feeling.id}', '🤝')">🤝</button>
+                        <button class="reaction-btn" onclick="addReaction('${feeling.id}', '💖')">💖</button>
+                        <button class="reaction-btn" onclick="addReaction('${feeling.id}', '🌱')">🌱</button>
+                        <button class="reaction-btn" onclick="addReaction('${feeling.id}', '☀️')">☀️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update insights
+        function updateInsights() {
+            if (feelings.length === 0) {
+                document.getElementById('patternInsight').textContent = 'Start expressing your feelings to see insights!';
+                return;
+            }
+
+            // Calculate emotion counts
+            const emotionCounts = {};
+            Object.keys(emotions).forEach(emotion => {
+                emotionCounts[emotion] = feelings.filter(f => f.emotion === emotion).length;
+            });
+
+            // Update mood chart
+            const chart = document.getElementById('moodChart');
+            chart.innerHTML = Object.entries(emotionCounts).map(([emotion, count]) => `
+                <div class="mood-bar" style="height: ${(count / Math.max(...Object.values(emotionCounts))) * 180}px; background: ${emotions[emotion].color};" title="${emotion}: ${count}"></div>
+            `).join('');
+
+            // Update common feelings
+            const mostCommon = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1]);
+            document.getElementById('commonFeelings').innerHTML = mostCommon.slice(0, 3).map(([emotion, count]) => `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>${emotions[emotion].icon} ${emotion.charAt(0).toUpperCase() + emotion.slice(1)}</span>
+                    <span style="color: var(--accent-purple); font-weight: bold;">${count}</span>
+                </div>
+            `).join('');
+
+            // Update growth milestones
+            const milestones = [];
+            if (feelings.length >= 1) milestones.push('🌟 First feeling expressed');
+            if (feelings.length >= 5) milestones.push('💫 5 feelings shared');
+            if (feelings.length >= 10) milestones.push('🌈 10 feelings documented');
+            if (feelings.length >= 30) milestones.push('✨ 30 feelings recorded');
+
+            document.getElementById('growthMilestones').innerHTML = milestones.length > 0 
+                ? milestones.map(milestone => `<p>${milestone}</p>`).join('')
+                : '<p>Keep expressing your feelings to unlock milestones!</p>';
+
+            // Pattern insight
+            const totalFeelings = feelings.length;
+            const positiveFeelings = ['happy', 'grateful', 'hopeful', 'peaceful'].reduce((sum, emotion) => sum + emotionCounts[emotion], 0);
+            const positiveRatio = (positiveFeelings / totalFeelings) * 100;
+
+            let insight = '';
+            if (positiveRatio > 60) {
+                insight = 'You\'ve been feeling quite positive lately! 🌟';
+            } else if (positiveRatio < 30) {
+                insight = 'You\'ve been going through some tough times. Remember, it\'s okay to feel this way. 💜';
+            } else {
+                insight = 'You have a balanced emotional landscape. Keep honoring all your feelings. 🌈';
+            }
+
+            document.getElementById('patternInsight').textContent = insight;
+        }
+
+        // Edit feeling
+        function editFeeling(id) {
+            const feeling = feelings.find(f => f.id === id);
+            if (feeling) {
+                editingId = id;
+                document.getElementById('editText').value = feeling.content;
+                document.getElementById('editModal').style.display = 'block';
+            }
+        }
+
+        // Save edit
+        function saveEdit() {
+            if (editingId) {
+                const feeling = feelings.find(f => f.id === editingId);
+                if (feeling) {
+                    feeling.content = document.getElementById('editText').value.trim();
+                    saveData();
+                    renderJournal();
+                    closeModal('editModal');
+                    showNotification('Your entry has been updated 💜');
+                }
+            }
+        }
+
+        // Delete feeling
+        function deleteFeeling(id) {
+            if (confirm('Are you sure you want to delete this entry?')) {
+                feelings = feelings.filter(f => f.id !== id);
+                saveData();
+                renderJournal();
+                updateInsights();
+                renderCommunity();
+                showNotification('Entry deleted 💜');
+            }
+        }
+
+        // Add reaction to community post
+        function addReaction(id, reaction) {
+            showNotification(`Sent ${reaction} to show support!`);
+        }
+
+        // Export data
+        function exportData() {
+            const dataStr = JSON.stringify(feelings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'emotia-feelings.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            showNotification('Your data has been exported 💜');
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (confirm('Are you sure you want to delete ALL your feelings? This cannot be undone.')) {
+                feelings = [];
+                saveData();
+                renderJournal();
+                updateInsights();
+                renderCommunity();
+                showNotification('All data has been cleared 💜');
+            }
+        }
+
+        // Utility functions
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+
+            if (diff < 60000) return 'Just now';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+            if (diff < 604800000) return `${Math.floor(diff / 86400000)}d ago`;
+
+            return date.toLocaleDateString();
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            editingId = null;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    editingId = null;
+                }
+            });
+        }
+
+        // Affirmations functionality
+        const affirmations = [
+            "I am worthy of love, happiness, and peace. My feelings are valid and important.",
+            "Every challenge I face is an opportunity to grow and become stronger.",
+            "I have the power to create positive change in my life and in the lives of others.",
+            "My past does not define my future. I am capable of creating a beautiful tomorrow.",
+            "I am enough exactly as I am, and I am becoming even better every day.",
+            "I deserve to pursue my dreams and live a life that brings me joy and fulfillment.",
+            "I am resilient, strong, and capable of overcoming any obstacle that comes my way.",
+            "My purpose is unfolding perfectly, even when I can't see the full picture yet.",
+            "I am surrounded by love and support, even when I feel alone.",
+            "Every step I take toward my goals is a victory worth celebrating.",
+            "I choose to focus on what I can control and let go of what I cannot.",
+            "My emotions are messengers, helping me understand myself better.",
+            "I am growing, learning, and evolving into the person I'm meant to be.",
+            "Today, I choose kindness, compassion, and understanding for myself and others.",
+            "I have the courage to be authentic and express my true self."
+        ];
+
+        function updateAffirmations() {
+            const today = new Date().getDate();
+            const affirmationIndex = today % affirmations.length;
+            const affirmationElement = document.getElementById('affirmationText');
+            if (affirmationElement) {
+                affirmationElement.textContent = `"${affirmations[affirmationIndex]}"`;
+            }
+        }
+
+        function newAffirmation() {
+            const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+            const affirmationElement = document.getElementById('affirmationText');
+            if (affirmationElement) {
+                affirmationElement.textContent = `"${randomAffirmation}"`;
+            }
+        }
+
+        // Breathing exercise
+        function startBreathing() {
+            const circle = document.getElementById('breathingCircle');
+            const text = document.getElementById('breathingText');
+            const button = document.querySelector('.breathing-exercise button');
+
+            if (breathingInterval) {
+                // Stop breathing exercise
+                clearInterval(breathingInterval);
+                breathingInterval = null;
+                circle.classList.remove('breathing');
+                text.textContent = 'Click to start';
+                button.textContent = 'Start Breathing';
+                return;
+            }
+
+            // Start breathing exercise
+            circle.classList.add('breathing');
+            button.textContent = 'Stop Breathing';
+            
+            let cycle = 0;
+            const phases = ['Breathe in...', 'Hold...', 'Breathe out...', 'Rest...'];
+            
+            breathingInterval = setInterval(() => {
+                text.textContent = phases[cycle % 4];
+                cycle++;
+                
+                if (cycle >= 16) { // 4 cycles of 4 phases
+                    clearInterval(breathingInterval);
+                    breathingInterval = null;
+                    circle.classList.remove('breathing');
+                    text.textContent = 'Well done! 💜';
+                    button.textContent = 'Start Breathing';
+                    setTimeout(() => {
+                        text.textContent = 'Click to start';
+                    }, 3000);
+                }
+            }, 4000); // 4 seconds per phase
+        }
+    </script>
+</body>
+</html>
+
